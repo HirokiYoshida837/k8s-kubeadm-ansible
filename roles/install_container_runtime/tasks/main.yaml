@@ -1,0 +1,33 @@
+---
+- name: Update apt packages
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: Install Docker
+  become: yes
+  apt:
+    name:
+    - docker.io
+    - apt-transport-https
+    - curl
+    update_cache: yes 
+  notify:
+    - require_restart_docker
+
+- name: setup docker daemon (overlay2, cgroup driver, log driver, ...)
+  become: yes
+  copy:
+    content: |
+      {
+        "exec-opts": ["native.cgroupdriver=systemd"],
+        "log-driver": "json-file",
+        "log-opts": {
+          "max-size": "100m"
+        },
+        "storage-driver": "overlay2"
+      }
+    dest: /etc/docker/daemon.json 
+    mode: 0644
+  notify:
+  - require_restart_docker

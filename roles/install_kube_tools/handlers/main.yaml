@@ -1,0 +1,20 @@
+---
+- name: start and enable kubelet
+  become: yes
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+    name: kubelet
+  listen: require_restart_kubelet
+  
+  
+#ec 11 17:51:25 controller kubelet[3247]: I1211 17:51:25.331096    3247 docker_service.go:243] "Hairpin mode is set" hairpinMode=hairpin-veth
+#Dec 11 17:51:25 controller kubelet[3247]: I1211 17:51:25.331258    3247 cni.go:240] "Unable to update cni config" err="no networks found in /etc/cni/net.d"
+#Dec 11 17:51:25 controller kubelet[3247]: I1211 17:51:25.336116    3247 cni.go:240] "Unable to update cni config" err="no networks found in /etc/cni/net.d"
+#Dec 11 17:51:25 controller kubelet[3247]: I1211 17:51:25.336412    3247 docker_service.go:258] "Docker cri networking managed by the network plugin" networkPluginName="cni"
+#Dec 11 17:51:25 controller kubelet[3247]: I1211 17:51:25.336617    3247 cni.go:240] "Unable to update cni config" err="no networks found in /etc/cni/net.d"
+#Dec 11 17:51:25 controller kubelet[3247]: I1211 17:51:25.345284    3247 docker_service.go:264] "Docker Info" dockerInfo=&{ID:MPVG:35DI:4JQC:ZBAQ:BYST:ZWRF:E3FF:FHJD:CDYK:3IDR:JSPH:2FRD Containers:0 C
+#Dec 11 17:51:25 controller kubelet[3247]: E1211 17:51:25.345358    3247 server.go:302] "Failed to run kubelet" err="failed to run Kubelet: misconfiguration: kubelet cgroup driver: \"systemd\" is diff
+#Dec 11 17:51:25 controller systemd[1]: kubelet.service: Main process exited, code=exited, status=1/FAILURE
+#Dec 11 17:51:25 controller systemd[1]: kubelet.service: Failed with result 'exit-code'.

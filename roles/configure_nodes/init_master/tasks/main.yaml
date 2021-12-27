@@ -1,0 +1,29 @@
+---
+- name: check kubeadm init has already executed.
+  become: yes
+  stat:
+    path: /etc/kubernetes/admin.conf
+  register: kubeadm_initialized
+
+- name: execute kubeadm init (controller)
+  become: yes
+  shell: kubeadm init --pod-network-cidr 192.168.0.0/16
+  when: kubeadm_initialized.stat.exists == false
+
+- name: create $HOME/.kube directory
+  file:
+    path: "/home/{{ ansible_user }}/.kube/"
+    state: directory
+    mode: "0755"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: copy admin.conf to $HOME/.kube/config
+  become: yes
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "/home/{{ ansible_user }}/.kube/config"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0600"
+    remote_src: true

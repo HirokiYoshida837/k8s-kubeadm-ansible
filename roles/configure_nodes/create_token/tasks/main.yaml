@@ -1,0 +1,17 @@
+---
+# - name: create kubeadm join token
+#   become: yes
+#   command: kubeadm token create
+#   register: kube_token
+
+# - name: create cert
+#   become: yes
+#   shell: openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
+#   register: kube_cert
+
+- name: create kubeadm join token
+  become: yes
+  command: kubeadm token create --print-join-command
+  register: kubeadm_join_cmd
+
+

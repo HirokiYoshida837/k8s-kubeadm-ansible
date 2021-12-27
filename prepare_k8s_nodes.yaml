@@ -1,0 +1,11 @@
+- name: k8s provisioning
+  hosts: 
+    - k8s_controller
+    - k8s_worker
+  roles:
+    - role: swap_off
+    
+    - role: install_container_runtime
+    
+    - role: install_kube_tools
+

@@ -1,0 +1,5 @@
+---
+# token: "{{ hostvars.controller.kube_token.stdout }}"
+# cert: "{{ hostvars.controller.kube_cert.stdout }}"
+
+join_command: "{{ hostvars.controller.kubeadm_join_cmd.stdout }}"

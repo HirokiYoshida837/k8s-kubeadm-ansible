@@ -1,0 +1,9 @@
+---
+# - name: join worker nodes to cluster
+#   become: true
+#   command: kubeadm join {{ hostvars.controller.ansible_host }}:6443 --token {{token}} --discovery-token-ca-cert-hash sha256:{{ cert }}
+
+- name: join worker nodes to cluster
+  become: true
+  # メタプログラミング的に実施しているけどどうかと思う。
+  shell: echo {{ join_command }} | bash

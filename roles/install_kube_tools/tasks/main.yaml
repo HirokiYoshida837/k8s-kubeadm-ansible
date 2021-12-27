@@ -1,0 +1,49 @@
+---
+- name: configure dependencies
+  become: yes
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+- name: Create kubernetes repo file
+  become: yes
+  file:
+    path: "/etc/apt/sources.list.d/kubernetes.list"
+    state: "touch"
+
+- name: Add K8s Source
+  become: yes
+  blockinfile:
+    path: "/etc/apt/sources.list.d/kubernetes.list"
+    block: |
+          deb https://apt.kubernetes.io/ kubernetes-xenial main
+
+- name: Update apt packages
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: Install k8s tools
+  become: yes
+  apt:
+    name:
+    - kubelet
+    - kubeadm
+    - kubectl
+  notify:
+    - require_restart_kubelet
+
+# TODO 治す
+# TASK [install_kube_tools : configure dependencies] ****************************************************************************************************************************************************
+# [WARNING]: Consider using the get_url or uri module rather than running 'curl'.  If you need to use command because get_url or uri is insufficient you can add 'warn: false' to this command task or
+# set 'command_warnings=False' in ansible.cfg to get rid of this message.
+# changed: [worker1] => changed=true 
+#   cmd: |-
+#     curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+#   delta: '0:00:00.193674'
+#   end: '2021-12-11 17:18:34.474393'
+#   rc: 0
+#   start: '2021-12-11 17:18:34.280719'
+#   stderr: 'Warning: apt-key output should not be parsed (stdout is not a terminal)'
+#   stderr_lines: <omitted>
+#   stdout: OK
+#   stdout_lines: <omitted>
